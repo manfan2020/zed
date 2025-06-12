@@ -9048,7 +9048,6 @@ dependencies = [
  "language",
  "log",
  "lsp",
- "picker",
  "project",
  "release_channel",
  "serde_json",
