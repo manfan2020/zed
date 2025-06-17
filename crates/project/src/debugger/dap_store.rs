@@ -264,6 +264,7 @@ impl DapStore {
                         binary.cwd.as_deref(),
                         binary.envs,
                         None,
+                        path_style,
                     );
                     let envs = askpass
                         .map(|askpass| {
