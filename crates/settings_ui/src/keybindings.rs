@@ -7,6 +7,7 @@ use gpui::{
     AppContext as _, Context, DismissEvent, Entity, EventEmitter, FocusHandle, Focusable,
     FontWeight, Global, KeyContext, ScrollStrategy, Subscription, WeakEntity, actions, div,
 };
+use settings::KeybindSource;
 use util::ResultExt;
 
 use ui::{
@@ -150,7 +151,6 @@ impl KeymapEditor {
     ) -> (Vec<ProcessedKeybinding>, Vec<StringMatchCandidate>) {
         let key_bindings_ptr = cx.key_bindings();
         let lock = key_bindings_ptr.borrow();
-        let sources = lock.sources();
         let key_bindings = lock.bindings();
 
         let mut processed_bindings = Vec::new();
@@ -170,7 +170,7 @@ impl KeymapEditor {
 
             let source = key_binding
                 .source()
-                .map(|source| sources.get(source).name().clone());
+                .map(|source_index| KeybindSource::from_meta_index(source_index).name().into());
 
             let action_name = key_binding.action().name();
 
