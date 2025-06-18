@@ -1446,7 +1446,6 @@ impl RemoteConnection for SshRemoteConnection {
         dest_path: TargetPathBuf,
         cx: &App,
     ) -> Task<Result<()>> {
-        println!("Uploading directory {src_path:?} to {dest_path:?}");
         let mut command = util::command::new_smol_command("scp");
         let output = self
             .socket
@@ -1796,7 +1795,6 @@ impl SshRemoteConnection {
         let version_str = match release_channel {
             ReleaseChannel::Nightly => {
                 let commit = commit.map(|s| s.full()).unwrap_or_default();
-
                 format!("{}-{}", version, commit)
             }
             ReleaseChannel::Dev => "build".to_string(),
@@ -2614,7 +2612,6 @@ mod fake {
 
         fn start_proxy(
             &self,
-
             _unique_identifier: String,
             _reconnect: bool,
             mut client_incoming_tx: mpsc::UnboundedSender<Envelope>,
@@ -2654,7 +2651,7 @@ mod fake {
         }
 
         fn path_style(&self) -> PathStyle {
-            PathStyle::Posix
+            PathStyle::current()
         }
     }
 
