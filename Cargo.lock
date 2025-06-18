@@ -12568,6 +12568,7 @@ dependencies = [
  "collections",
  "prost 0.9.0",
  "prost-build 0.9.0",
+ "remote_path",
  "serde",
  "workspace-hack",
 ]
@@ -13203,6 +13204,13 @@ dependencies = [
  "thiserror 2.0.12",
  "urlencoding",
  "util",
+ "workspace-hack",
+]
+
+[[package]]
+name = "remote_path"
+version = "0.1.0"
+dependencies = [
  "workspace-hack",
 ]
 
