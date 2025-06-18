@@ -232,18 +232,7 @@ impl PickerDelegate for OpenPathDelegate {
         cx: &mut Context<Picker<Self>>,
     ) -> Task<()> {
         let lister = &self.lister;
-        let last_item = Path::new(&query)
-            .file_name()
-            .unwrap_or_default()
-            .to_string_lossy();
-        let (mut dir, suffix) = if let Some(dir) = query.strip_suffix(last_item.as_ref()) {
-            (dir.to_string(), last_item.into_owned())
-        } else {
-            (query.clone(), String::new())
-        };
-        if dir == "" {
-            dir = PROMPT_ROOT.to_string();
-        }
+        let (dir, suffix) = get_dir_and_suffix(&query, self.path_style);
 
         println!("-> Updating matches for query: {query:?}, dir: {dir:?}, suffix: {suffix:?}");
         println!("-> with path style: {:?}", self.path_style);
@@ -495,6 +484,7 @@ impl PickerDelegate for OpenPathDelegate {
         _: &mut Context<Picker<Self>>,
     ) -> Option<String> {
         let candidate = self.get_entry(self.selected_index)?;
+        let path_style = self.path_style;
         Some(
             maybe!({
                 match &self.directory_state {
@@ -503,7 +493,10 @@ impl PickerDelegate for OpenPathDelegate {
                         parent_path,
                         candidate.path.string,
                         if candidate.is_dir {
-                            MAIN_SEPARATOR_STR
+                            match path_style {
+                                PathStyle::Posix => "/",
+                                PathStyle::Windows => "\\",
+                            }
                         } else {
                             ""
                         }
@@ -513,7 +506,10 @@ impl PickerDelegate for OpenPathDelegate {
                         parent_path,
                         candidate.path.string,
                         if candidate.is_dir {
-                            MAIN_SEPARATOR_STR
+                            match path_style {
+                                PathStyle::Posix => "/",
+                                PathStyle::Windows => "\\",
+                            }
                         } else {
                             ""
                         }
@@ -778,7 +774,7 @@ fn path_candidates(parent_path: &String, mut children: Vec<DirectoryItem>) -> Ve
 }
 
 fn get_dir_and_suffix(query: &str, path_style: PathStyle) -> (String, String) {
-    let last_item = Path::new(&query)
+    let last_item = Path::new(query)
         .file_name()
         .unwrap_or_default()
         .to_string_lossy();
