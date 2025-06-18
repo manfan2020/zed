@@ -815,7 +815,7 @@ fn get_dir_and_suffix(query: String, path_style: PathStyle) -> (String, String) 
                 (query, String::new())
             };
             if !dir.ends_with('/') {
-                dir.push_str('/');
+                dir.push('/');
             }
             (dir, suffix)
         }
@@ -829,7 +829,7 @@ fn get_dir_and_suffix(query: String, path_style: PathStyle) -> (String, String) 
                 dir = "C:\\".to_string();
             }
             if !dir.ends_with('\\') {
-                dir.push_str('\\');
+                dir.push('\\');
             }
             (dir, suffix)
         }
